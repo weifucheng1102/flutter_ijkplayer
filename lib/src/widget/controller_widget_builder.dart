@@ -12,7 +12,7 @@ import 'package:flutter_ijkplayer/src/widget/progress_bar.dart';
 
 /// Using mediaController to Construct a Controller UI
 typedef Widget IJKControllerWidgetBuilder(IjkMediaController controller);
-
+// typedef Widget CustomWidget;
 /// default create IJK Controller UI
 Widget defaultBuildIjkControllerWidget(IjkMediaController controller) {
   return DefaultIJKControllerWidget(
@@ -50,6 +50,7 @@ class DefaultIJKControllerWidget extends StatefulWidget {
 
   final IJKControllerWidgetBuilder fullscreenControllerWidgetBuilder;
 
+  final Widget customWidget;
   /// The UI of the controller.
   const DefaultIJKControllerWidget({
     @required this.controller,
@@ -61,6 +62,7 @@ class DefaultIJKControllerWidget extends StatefulWidget {
     this.currentFullScreenState = false,
     this.showFullScreenButton = true,
     this.fullscreenControllerWidgetBuilder,
+    this.customWidget,
     Key key,
   }) : super(key: key);
 
@@ -229,6 +231,7 @@ class _DefaultIJKControllerWidgetState extends State<DefaultIJKControllerWidget>
       tooltipDelegate: this,
       playWillPauseOther: widget.playWillPauseOther,
       fullScreenWidget: _buildFullScreenButton(),
+      customWidget: widget.customWidget
     );
   }
 
@@ -505,6 +508,7 @@ class PortraitController extends StatelessWidget {
   final TooltipDelegate tooltipDelegate;
   final bool playWillPauseOther;
   final Widget fullScreenWidget;
+  final Widget customWidget;
 
   const PortraitController({
     Key key,
@@ -513,6 +517,7 @@ class PortraitController extends StatelessWidget {
     this.tooltipDelegate,
     this.playWillPauseOther = true,
     this.fullScreenWidget,
+    this.customWidget,
   }) : super(key: key);
 
   bool get haveTime {
@@ -528,7 +533,9 @@ class PortraitController extends StatelessWidget {
     return Column(
       children: <Widget>[
         Expanded(
-          child: Container(),
+          child: Container(
+            child: customWidget,
+          ),
         ),
         bottomBar,
       ],
