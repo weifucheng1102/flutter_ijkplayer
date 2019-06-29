@@ -218,7 +218,9 @@ class _DefaultIJKControllerWidgetState extends State<DefaultIJKControllerWidget>
           Navigator.pop(context);
         } else {
           showFullScreenIJKPlayer(context, controller,
-              fullscreenControllerWidgetBuilder: fullscreenBuilder);
+              fullscreenControllerWidgetBuilder: fullscreenBuilder,
+              customWidget: widget.customWidget
+              );
         }
       },
     );
@@ -685,15 +687,24 @@ showFullScreenIJKPlayer(
   BuildContext context,
   IjkMediaController controller, {
   IJKControllerWidgetBuilder fullscreenControllerWidgetBuilder,
+  Widget customWidget
 }) async {
   Navigator.push(
     context,
     FullScreenRoute(
       builder: (c) {
         return IjkPlayer(
-          mediaController: controller,
-          controllerWidgetBuilder: (ctl) =>
-              fullscreenControllerWidgetBuilder(ctl),
+          mediaController: controller,        
+          controllerWidgetBuilder: (ctl) {
+            return DefaultIJKControllerWidget(
+              controller: controller,
+              customWidget: customWidget,
+              currentFullScreenState: true,
+              fullscreenControllerWidgetBuilder: (ctl) {
+                return fullscreenControllerWidgetBuilder(ctl);
+              },
+            );
+          },
         );
       },
     ),
@@ -733,7 +744,7 @@ Widget _buildFullScreenMediaController(
     IjkMediaController controller, bool fullScreen) {
   return DefaultIJKControllerWidget(
     controller: controller,
-    currentFullScreenState: true,
+    currentFullScreenState: true
   );
 }
 
