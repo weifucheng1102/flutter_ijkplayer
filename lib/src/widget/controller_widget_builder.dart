@@ -54,6 +54,8 @@ class DefaultIJKControllerWidget extends StatefulWidget {
   final IJKControllerWidgetBuilder fullscreenControllerWidgetBuilder;
 
   final Widget customWidget;
+  final ValueChanged<bool> onFullButton;
+  // bool set onPlayButton => true;
   /// See [FullScreenType]
   final FullScreenType fullScreenType;
 
@@ -70,6 +72,7 @@ class DefaultIJKControllerWidget extends StatefulWidget {
     this.showFullScreenButton = true,
     this.fullscreenControllerWidgetBuilder,
     this.customWidget,
+    this.onFullButton,
     this.fullScreenType = FullScreenType.rotateBox,
   }) : super(key: key);
 
@@ -89,6 +92,8 @@ class DefaultIJKControllerWidget extends StatefulWidget {
     bool showFullScreenButton,
     IJKControllerWidgetBuilder fullscreenControllerWidgetBuilder,
     FullScreenType fullScreenType,
+    Widget customWidget,
+    ValueChanged<bool> onFullButton,
   }) {
     return DefaultIJKControllerWidget(
       controller: controller ?? this.controller,
@@ -104,6 +109,8 @@ class DefaultIJKControllerWidget extends StatefulWidget {
       showFullScreenButton: showFullScreenButton ?? this.showFullScreenButton,
       verticalGesture: verticalGesture ?? this.verticalGesture,
       fullScreenType: fullScreenType ?? this.fullScreenType,
+      customWidget: customWidget ?? this.customWidget,
+      onFullButton: onFullButton ?? this.onFullButton,
     );
   }
 }
@@ -224,12 +231,19 @@ class _DefaultIJKControllerWidgetState extends State<DefaultIJKControllerWidget>
       icon: Icon(isFull ? Icons.fullscreen_exit : Icons.fullscreen),
       onPressed: () {
         if (isFull) {
+          if (widget.onFullButton != null) {
+            widget.onFullButton(false);
+          }
           Navigator.pop(context);
         } else {
+          if (widget.onFullButton != null) {
+            widget.onFullButton(true);
+          }
           showFullScreenIJKPlayer(
             context,
             controller,
             customWidget: widget.customWidget,
+            onFullButton: widget.onFullButton,
             fullscreenControllerWidgetBuilder: fullscreenBuilder,
             fullScreenType: widget.fullScreenType,
           );
@@ -248,7 +262,8 @@ class _DefaultIJKControllerWidgetState extends State<DefaultIJKControllerWidget>
       tooltipDelegate: this,
       playWillPauseOther: widget.playWillPauseOther,
       fullScreenWidget: _buildFullScreenButton(),
-      customWidget: widget.customWidget
+      customWidget: widget.customWidget,
+      onFullButton: widget.onFullButton,
     );
   }
 
@@ -287,7 +302,9 @@ class _DefaultIJKControllerWidgetState extends State<DefaultIJKControllerWidget>
           ),
         );
 
-        if (this.widget.fullScreenType == FullScreenType.rotateBox && this.widget.currentFullScreenState && _overlayTurns != 0) {
+        if (this.widget.fullScreenType == FullScreenType.rotateBox &&
+            this.widget.currentFullScreenState &&
+            _overlayTurns != 0) {
           w = RotatedBox(
             child: w,
             quarterTurns: _overlayTurns,
@@ -536,6 +553,8 @@ class PortraitController extends StatelessWidget {
   final Widget fullScreenWidget;
   final Widget customWidget;
 
+  final ValueChanged<bool> onFullButton;
+
   const PortraitController({
     Key key,
     this.controller,
@@ -544,6 +563,7 @@ class PortraitController extends StatelessWidget {
     this.playWillPauseOther = true,
     this.fullScreenWidget,
     this.customWidget,
+    this.onFullButton,
   }) : super(key: key);
 
   bool get haveTime {

@@ -9,6 +9,7 @@ showFullScreenIJKPlayer(
   BuildContext context,
   IjkMediaController controller, {
   Widget customWidget,
+  ValueChanged<bool> onFullButton,
   IJKControllerWidgetBuilder fullscreenControllerWidgetBuilder,
   FullScreenType fullScreenType = FullScreenType.rotateBox,
 }) async {
@@ -17,6 +18,7 @@ showFullScreenIJKPlayer(
       context,
       controller,
       customWidget: customWidget,
+      onFullButton: onFullButton,
       fullscreenControllerWidgetBuilder: fullscreenControllerWidgetBuilder,
     );
     return;
@@ -26,6 +28,7 @@ showFullScreenIJKPlayer(
     context,
     controller,
     customWidget,
+    onFullButton,
     fullscreenControllerWidgetBuilder,
   );
 }
@@ -34,6 +37,7 @@ _showFullScreenWithRotateScreen(
     BuildContext context,
     IjkMediaController controller,
     Widget customWidget,
+    ValueChanged<bool> onFullButton,
     IJKControllerWidgetBuilder fullscreenControllerWidgetBuilder) async {
   Navigator.push(
     context,
@@ -46,6 +50,7 @@ _showFullScreenWithRotateScreen(
                   controller: controller,
                   customWidget: customWidget,
                   currentFullScreenState: true,
+                  onFullButton: onFullButton,
                   fullscreenControllerWidgetBuilder: (ctl) {
                     return fullscreenControllerWidgetBuilder(ctl);
                   },
@@ -90,6 +95,7 @@ _showFullScreenWithRotateBox(
   BuildContext context,
   IjkMediaController controller, {
   Widget customWidget,
+  ValueChanged<bool> onFullButton,
   IJKControllerWidgetBuilder fullscreenControllerWidgetBuilder,
 }) async {
   var info = await controller.getVideoInfo();
@@ -146,6 +152,7 @@ _showFullScreenWithRotateBox(
                 return DefaultIJKControllerWidget(
                   controller: controller,
                   customWidget: customWidget,
+                  onFullButton: onFullButton,
                   currentFullScreenState: true,
                   fullscreenControllerWidgetBuilder: (ctl) {
                     return fullscreenControllerWidgetBuilder(ctl);
