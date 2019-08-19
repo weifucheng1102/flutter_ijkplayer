@@ -1,3 +1,22 @@
+## 0.3.3
+
+Migrate ios pod library from github to azure.
+
+There is no code modification compared to 0.3.2.
+
+## 0.3.2
+
+Fix:
+
+- Touch gesture problem
+- Missing plugin error message
+
+## 0.3.1
+
+Update:
+
+- Use a new full screen type: Now, use `RotateBox` to rotate IjkPlayer.
+
 ## 0.3.0
 
 Fix: [#91](https://github.com/CaiJingLong/flutter_ijkplayer/issues/91)

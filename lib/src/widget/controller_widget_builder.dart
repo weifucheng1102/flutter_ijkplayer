@@ -4,11 +4,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_ijkplayer/flutter_ijkplayer.dart';
+import 'package:flutter_ijkplayer/src/helper/full_screen_helper.dart';
 import 'package:flutter_ijkplayer/src/helper/logutil.dart';
 import 'package:flutter_ijkplayer/src/helper/time_helper.dart';
 import 'package:flutter_ijkplayer/src/helper/ui_helper.dart';
 import 'package:flutter_ijkplayer/src/route/fullscreen_route.dart';
 import 'package:flutter_ijkplayer/src/widget/progress_bar.dart';
+
+part 'full_screen.part.dart';
 
 /// Using mediaController to Construct a Controller UI
 typedef Widget IJKControllerWidgetBuilder(IjkMediaController controller);
@@ -51,8 +54,12 @@ class DefaultIJKControllerWidget extends StatefulWidget {
   final IJKControllerWidgetBuilder fullscreenControllerWidgetBuilder;
 
   final Widget customWidget;
+  /// See [FullScreenType]
+  final FullScreenType fullScreenType;
+
   /// The UI of the controller.
   const DefaultIJKControllerWidget({
+    Key key,
     @required this.controller,
     this.doubleTapPlay = false,
     this.verticalGesture = true,
@@ -63,7 +70,7 @@ class DefaultIJKControllerWidget extends StatefulWidget {
     this.showFullScreenButton = true,
     this.fullscreenControllerWidgetBuilder,
     this.customWidget,
-    Key key,
+    this.fullScreenType = FullScreenType.rotateBox,
   }) : super(key: key);
 
   @override
@@ -71,6 +78,7 @@ class DefaultIJKControllerWidget extends StatefulWidget {
       _DefaultIJKControllerWidgetState();
 
   DefaultIJKControllerWidget copyWith({
+    Key key,
     IjkMediaController controller,
     bool doubleTapPlay,
     bool verticalGesture,
@@ -80,7 +88,7 @@ class DefaultIJKControllerWidget extends StatefulWidget {
     bool currentFullScreenState,
     bool showFullScreenButton,
     IJKControllerWidgetBuilder fullscreenControllerWidgetBuilder,
-    Key key,
+    FullScreenType fullScreenType,
   }) {
     return DefaultIJKControllerWidget(
       controller: controller ?? this.controller,
@@ -95,6 +103,7 @@ class DefaultIJKControllerWidget extends StatefulWidget {
       playWillPauseOther: playWillPauseOther ?? this.playWillPauseOther,
       showFullScreenButton: showFullScreenButton ?? this.showFullScreenButton,
       verticalGesture: verticalGesture ?? this.verticalGesture,
+      fullScreenType: fullScreenType ?? this.fullScreenType,
     );
   }
 }
@@ -217,16 +226,22 @@ class _DefaultIJKControllerWidgetState extends State<DefaultIJKControllerWidget>
         if (isFull) {
           Navigator.pop(context);
         } else {
-          showFullScreenIJKPlayer(context, controller,
-              fullscreenControllerWidgetBuilder: fullscreenBuilder,
-              customWidget: widget.customWidget
-              );
+          showFullScreenIJKPlayer(
+            context,
+            controller,
+            customWidget: widget.customWidget,
+            fullscreenControllerWidgetBuilder: fullscreenBuilder,
+            fullScreenType: widget.fullScreenType,
+          );
         }
       },
     );
   }
 
+  int _overlayTurns = 0;
+
   Widget buildPortrait(VideoInfo info) {
+    _overlayTurns = FullScreenHelper.getQuarterTurns(info, context);
     return PortraitController(
       controller: controller,
       info: info,
@@ -266,11 +281,20 @@ class _DefaultIJKControllerWidgetState extends State<DefaultIJKControllerWidget>
     hideTooltip();
     _tipOverlay = OverlayEntry(
       builder: (BuildContext context) {
-        return IgnorePointer(
+        Widget w = IgnorePointer(
           child: Center(
             child: widget,
           ),
         );
+
+        if (this.widget.fullScreenType == FullScreenType.rotateBox && this.widget.currentFullScreenState && _overlayTurns != 0) {
+          w = RotatedBox(
+            child: w,
+            quarterTurns: _overlayTurns,
+          );
+        }
+
+        return w;
       },
     );
     Overlay.of(context).insert(_tipOverlay);
@@ -681,73 +705,4 @@ abstract class TooltipDelegate {
 enum VolumeType {
   system,
   media,
-}
-
-showFullScreenIJKPlayer(
-  BuildContext context,
-  IjkMediaController controller, {
-  IJKControllerWidgetBuilder fullscreenControllerWidgetBuilder,
-  Widget customWidget
-}) async {
-  Navigator.push(
-    context,
-    FullScreenRoute(
-      builder: (c) {
-        return IjkPlayer(
-          mediaController: controller,        
-          controllerWidgetBuilder: (ctl) {
-            return DefaultIJKControllerWidget(
-              controller: controller,
-              customWidget: customWidget,
-              currentFullScreenState: true,
-              fullscreenControllerWidgetBuilder: (ctl) {
-                return fullscreenControllerWidgetBuilder(ctl);
-              },
-            );
-          },
-        );
-      },
-    ),
-  ).then((_) {
-    IjkManager.unlockOrientation();
-    IjkManager.setCurrentOrientation(DeviceOrientation.portraitUp);
-  });
-
-  var info = await controller.getVideoInfo();
-
-  Axis axis;
-
-  if (info.width == 0 || info.height == 0) {
-    axis = Axis.horizontal;
-  } else if (info.width > info.height) {
-    if (info.degree == 90 || info.degree == 270) {
-      axis = Axis.vertical;
-    } else {
-      axis = Axis.horizontal;
-    }
-  } else {
-    if (info.degree == 90 || info.degree == 270) {
-      axis = Axis.horizontal;
-    } else {
-      axis = Axis.vertical;
-    }
-  }
-
-  if (axis == Axis.horizontal) {
-    IjkManager.setLandScape();
-  } else {
-    IjkManager.setPortrait();
-  }
-}
-
-Widget _buildFullScreenMediaController(
-    IjkMediaController controller, bool fullScreen) {
-  return DefaultIJKControllerWidget(
-    controller: controller,
-    currentFullScreenState: true
-  );
-}
-
-Widget buildFullscreenMediaController(IjkMediaController controller) {
-  return _buildFullScreenMediaController(controller, true);
 }

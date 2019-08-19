@@ -8,38 +8,35 @@ The question of Android might not be able to run will be explained in detail.
 The simulator is out of use, so please use the real machine for debugging.
 
 - Android: I added the so Library of x86, but my voice decoding here is abnormal.
-- iOS: The simulator library is added, but it has sound and no pictures.
+- iOS: The simulator library is added, but it has sound and no video. It's normal in real device.
 
 Before using library, you can star and download the code to try the example.
 
-## Menu
-
 - [ijkplayer](#ijkplayer)
-  - [Menu](#Menu)
-  - [Install](#Install)
-  - [Build](#Build)
-    - [Custom compile library](#Custom-compile-library)
-    - [iOS](#iOS)
-    - [Android](#Android)
-  - [Simple Example](#Simple-Example)
-  - [Usage](#Usage)
-    - [Usage of ijkplayer](#Usage-of-ijkplayer)
+  - [Install](#install)
+  - [Build](#build)
+    - [Custom compile library](#custom-compile-library)
+    - [iOS](#ios)
+    - [Android](#android)
+  - [Simple Example](#simple-example)
+  - [Usage](#usage)
+    - [Usage of ijkplayer](#usage-of-ijkplayer)
     - [about dispose](#about-dispose)
-    - [Usage of controller](#Usage-of-controller)
-      - [DataSource](#DataSource)
+    - [Usage of controller](#usage-of-controller)
+      - [DataSource](#datasource)
       - [control your media](#control-your-media)
       - [get media info](#get-media-info)
       - [screen shot](#screen-shot)
-      - [Observer for resource](#Observer-for-resource)
-      - [Media Speed](#Media-Speed)
-      - [IjkStatus](#IjkStatus)
-      - [Custom Options](#Custom-Options)
-        - [IjkOptionCategory](#IjkOptionCategory)
+      - [Observer for resource](#observer-for-resource)
+      - [Media Speed](#media-speed)
+      - [IjkStatus](#ijkstatus)
+      - [Custom Options](#custom-options)
+        - [IjkOptionCategory](#ijkoptioncategory)
       - [release resource](#release-resource)
-    - [Use self controller UI](#Use-self-controller-UI)
-    - [Build widget from IjkStatus](#Build-widget-from-IjkStatus)
-    - [Use Texture widget](#Use-Texture-widget)
-  - [LICENSE](#LICENSE)
+    - [Use self controller UI](#use-self-controller-ui)
+    - [Build widget from IjkStatus](#build-widget-from-ijkstatus)
+    - [Use Texture widget](#use-texture-widget)
+  - [LICENSE](#license)
 
 ## Install
 
@@ -71,8 +68,10 @@ Because the libraries of some iOS codes are large, a pod-dependent ijkplayer lib
 The pod library is hosted in the GitHub repository at https://github.com/CaiJingLong/flutter_ijkplayer_pod
 Instead of tar.gz or zip, we use tar.xz to compress. This compression format has high compression rate, but slow compression and decompression speed. Considering the way of high compression rate, we should use high compression rate.
 If a friend is willing to provide CDN acceleration, you can contact me
-IOS code comes from iOS code in https://github.com/jadennn/flutter_ijk
-On this basis, rotation notification is added.
+The ios part of the code is based on the https://github.com/jadennn/flutter_ijk.
+Add some change rotation notification is added.
+
+Now, the code in the [repository](https://gitee.com/kikt/ijkplayer_thrid_party)
 
 ### Android
 
@@ -351,6 +350,8 @@ await controller.dispose(); // After this method call, the current controller is
 
 Use `IJKPlayer`'s `controllerWidgetBuilder` params can customize UI, default use `defaultBuildIjkControllerWidget` method to get widget.
 
+The type def sign: `typedef Widget IJKControllerWidgetBuilder(IjkMediaController controller);`
+
 The returned widget will be overwritten on the `Texture`.
 
 ```dart
@@ -361,6 +362,22 @@ IJKPlayer(
   },
 );
 ```
+
+The library use `DefaultIJKControllerWidget` to build the widget.
+
+This class provides some properties for customization. All properties except `controller` are optional:
+
+|               name                |            type            |         default          |                                      desc                                      |
+| :-------------------------------: | :------------------------: | :----------------------: | :----------------------------------------------------------------------------: |
+|           doubleTapPlay           |            bool            |          false           |                            doubleTap gesture switch                            |
+|          verticalGesture          |            bool            |           true           |                            vertical gesture switch                             |
+|         horizontalGesture         |            bool            |           true           |                           horizontal gesture switch                            |
+|            volumeType             |         VolumeType         |    VolumeType.system     |           vertical gesture changes the type of sound (system,media)            |
+|        playWillPauseOther         |            bool            |           true           |                     play the video will pause other medias                     |
+|      currentFullScreenState       |            bool            |          false           | **If you are customizing the full screen interface, this must be set to true** |
+|       showFullScreenButton        |            bool            |           true           |                   Whether to display the full screen button                    |
+| fullscreenControllerWidgetBuilder | IJKControllerWidgetBuilder |                          |                    Can customize the full screen interface                     |
+|          fullScreenType           |       FullScreenType       | FullScreenType.rotateBox |               Full screen type (rotate screen, or use RotateBox)               |
 
 ### Build widget from IjkStatus
 
