@@ -236,7 +236,7 @@ static IjkplayerPlugin *__sharedInstance;
     [[NSNotificationCenter defaultCenter] postNotificationName:flutterOrientationNotifyName
                                                         object:nil
                                                       userInfo:@{flutterOrientationNotifyKey
-                                                                 :@(UIInterfaceOrientationMaskAll)}];
+                                                                 :@(UIInterfaceOrientationMaskPortrait)}];
 }
 
 
