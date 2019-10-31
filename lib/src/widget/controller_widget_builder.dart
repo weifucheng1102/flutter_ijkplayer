@@ -649,6 +649,10 @@ class PortraitController extends StatelessWidget {
     return haveTime
         ? Text(
             TimeHelper.getTimeText(info.currentPosition),
+            textScaleFactor: 1,
+            style: TextStyle(
+              fontSize: 12
+            ),
           )
         : Container();
   }
@@ -657,6 +661,10 @@ class PortraitController extends StatelessWidget {
     return haveTime
         ? Text(
             TimeHelper.getTimeText(info.duration),
+            textScaleFactor: 1,
+            style: TextStyle(
+              fontSize: 12
+            ),
           )
         : Container();
   }
