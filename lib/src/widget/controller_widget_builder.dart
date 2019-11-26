@@ -140,6 +140,16 @@ class _DefaultIJKControllerWidgetState extends State<DefaultIJKControllerWidget>
   @override
   void initState() {
     super.initState();
+    controller.ijkStatusStream.listen((onData) {
+      if (onData == IjkStatus.playing) {
+        if (_isShow) {
+          // print('test');
+          setState(() {
+            _isShow = false;
+          });
+        }
+      }
+    });
     startTimer();
     controllerSubscription =
         controller.textureIdStream.listen(_onTextureIdChange);
@@ -650,9 +660,7 @@ class PortraitController extends StatelessWidget {
         ? Text(
             TimeHelper.getTimeText(info.currentPosition),
             textScaleFactor: 1,
-            style: TextStyle(
-              fontSize: 12
-            ),
+            style: TextStyle(fontSize: 12),
           )
         : Container();
   }
@@ -662,9 +670,7 @@ class PortraitController extends StatelessWidget {
         ? Text(
             TimeHelper.getTimeText(info.duration),
             textScaleFactor: 1,
-            style: TextStyle(
-              fontSize: 12
-            ),
+            style: TextStyle(fontSize: 12),
           )
         : Container();
   }
