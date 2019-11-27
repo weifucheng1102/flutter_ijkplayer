@@ -266,13 +266,14 @@ class _DefaultIJKControllerWidgetState extends State<DefaultIJKControllerWidget>
 
   Widget buildPortrait(VideoInfo info) {
     _overlayTurns = FullScreenHelper.getQuarterTurns(info, context);
+    var isFull = widget.currentFullScreenState;
     return PortraitController(
       controller: controller,
       info: info,
       tooltipDelegate: this,
       playWillPauseOther: widget.playWillPauseOther,
       fullScreenWidget: _buildFullScreenButton(),
-      customWidget: widget.customWidget,
+      customWidget: isFull ? widget.customWidget : Container(),
       onFullButton: widget.onFullButton,
     );
   }
