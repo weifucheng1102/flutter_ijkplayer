@@ -12,6 +12,7 @@ showFullScreenIJKPlayer(
   ValueChanged<bool> onFullButton,
   IJKControllerWidgetBuilder fullscreenControllerWidgetBuilder,
   FullScreenType fullScreenType = FullScreenType.rotateBox,
+  StatusWidgetBuilder statusWidgetBuilder,
 }) async {
   if (fullScreenType == FullScreenType.rotateBox) {
     _showFullScreenWithRotateBox(
@@ -30,6 +31,7 @@ showFullScreenIJKPlayer(
     customWidget,
     onFullButton,
     fullscreenControllerWidgetBuilder,
+    statusWidgetBuilder,
   );
 }
 
@@ -38,13 +40,16 @@ _showFullScreenWithRotateScreen(
     IjkMediaController controller,
     Widget customWidget,
     ValueChanged<bool> onFullButton,
-    IJKControllerWidgetBuilder fullscreenControllerWidgetBuilder) async {
+    IJKControllerWidgetBuilder fullscreenControllerWidgetBuilder,
+    StatusWidgetBuilder statusWidgetBuilder,
+    ) async {
   Navigator.push(
     context,
     FullScreenRoute(
       builder: (c) {
         return IjkPlayer(
           mediaController: controller,
+          statusWidgetBuilder: statusWidgetBuilder,
            controllerWidgetBuilder: (ctl) {
                 return DefaultIJKControllerWidget(
                   controller: controller,
@@ -97,6 +102,7 @@ _showFullScreenWithRotateBox(
   Widget customWidget,
   ValueChanged<bool> onFullButton,
   IJKControllerWidgetBuilder fullscreenControllerWidgetBuilder,
+  StatusWidgetBuilder statusWidgetBuilder,
 }) async {
   var info = await controller.getVideoInfo();
 
@@ -148,6 +154,7 @@ _showFullScreenWithRotateBox(
             quarterTurns: quarterTurns,
             child: IjkPlayer(
               mediaController: controller,
+              statusWidgetBuilder: statusWidgetBuilder,
               controllerWidgetBuilder: (ctl) {
                 return DefaultIJKControllerWidget(
                   controller: controller,

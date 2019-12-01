@@ -59,6 +59,8 @@ class DefaultIJKControllerWidget extends StatefulWidget {
   /// See [FullScreenType]
   final FullScreenType fullScreenType;
 
+  final StatusWidgetBuilder statusWidgetBuilder;            
+
   /// The UI of the controller.
   const DefaultIJKControllerWidget({
     Key key,
@@ -74,6 +76,7 @@ class DefaultIJKControllerWidget extends StatefulWidget {
     this.customWidget,
     this.onFullButton,
     this.fullScreenType = FullScreenType.rotateBox,
+    this.statusWidgetBuilder = IjkStatusWidget.buildStatusWidget,
   }) : super(key: key);
 
   @override
@@ -256,6 +259,7 @@ class _DefaultIJKControllerWidgetState extends State<DefaultIJKControllerWidget>
             onFullButton: widget.onFullButton,
             fullscreenControllerWidgetBuilder: fullscreenBuilder,
             fullScreenType: widget.fullScreenType,
+            statusWidgetBuilder: widget.statusWidgetBuilder,
           );
         }
       },
