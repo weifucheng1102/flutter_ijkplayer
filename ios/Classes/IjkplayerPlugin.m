@@ -181,6 +181,34 @@ static IjkplayerPlugin *__sharedInstance;
 }
 
 - (void) setCurrentOrientationWithCall:(FlutterMethodCall *)call {
+    
+    NSDictionary *dict = [call arguments];
+    NSArray *orientations = dict[@"orientation"];
+    UIInterfaceOrientationMask mask = 0;
+    if (orientations.count == 0) {
+        mask |= UIInterfaceOrientationMaskAll;
+    }
+    for (id number in orientations) {
+        int value = [number intValue];
+        UIDeviceOrientation orientation = [self convertIntToOrientation:value];
+        NSLog(@"orientation = %ld",(long)orientation);
+        if (orientation == UIDeviceOrientationPortrait){
+            mask |= UIInterfaceOrientationMaskPortrait;
+        }else if (orientation == UIDeviceOrientationLandscapeLeft) {
+            mask |= UIInterfaceOrientationMaskLandscapeLeft;
+        }else if (orientation == UIDeviceOrientationPortraitUpsideDown) {
+            mask |= UIInterfaceOrientationMaskPortraitUpsideDown;
+        }else if (orientation == UIDeviceOrientationLandscapeRight) {
+            mask |= UIInterfaceOrientationMaskLandscapeRight;
+        }
+    }
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:flutterOrientationNotifyName
+                                                        object:nil
+                                                      userInfo:@{flutterOrientationNotifyKey
+                                                                 :@(mask)}];
+    
+    
     if([[UIDevice currentDevice]respondsToSelector:@selector(setOrientation:)]){
         SEL selector = NSSelectorFromString(@"setOrientation:");
         NSDictionary *dict = [call arguments];
@@ -218,11 +246,10 @@ static IjkplayerPlugin *__sharedInstance;
             mask |= UIInterfaceOrientationMaskLandscapeRight;
         }
     }
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:flutterOrientationNotifyName
-                                                        object:nil
-                                                      userInfo:@{flutterOrientationNotifyKey
-                                                                 :@(mask)}];
+//   [[NSNotificationCenter defaultCenter] postNotificationName:flutterOrientationNotifyName
+//                                                        object:nil
+//                                                      userInfo:@{flutterOrientationNotifyKey
+//                                                                 :@(mask)}];
 }
 
 - (void) unlockOrientation {
