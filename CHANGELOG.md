@@ -1,3 +1,20 @@
+## 0.3.5+1
+
+To adapt to the new version of the flutter sdk check kt plugin.
+
+## 0.3.5
+
+Feature:
+
+- Auto hide the status bar when full screen and show in exit.
+- Add callback when the full screen state changes for `DefaultIJKControllerWidget`.
+
+## 0.3.4
+
+Fix:
+
+- The fps of the autoplayed datasource is always 3.
+
 ## 0.3.3
 
 Migrate ios pod library from github to azure.

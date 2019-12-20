@@ -51,6 +51,7 @@ class DefaultIJKControllerWidget extends StatefulWidget {
   /// The current full-screen button style should not be changed by users.
   final bool currentFullScreenState;
 
+  /// Build widget for full screen.
   final IJKControllerWidgetBuilder fullscreenControllerWidgetBuilder;
 
   final Widget customWidget;
@@ -60,6 +61,11 @@ class DefaultIJKControllerWidget extends StatefulWidget {
   final FullScreenType fullScreenType;
 
   final StatusWidgetBuilder statusWidgetBuilder;            
+  /// Whether to automatically hide the status bar when it is full screen.
+  final bool hideSystemBarOnFullScreen;
+
+  /// Callback in full screen, full screen when enter true, false to exit full screen.
+  final void Function(bool enter) onFullScreen;
 
   /// The UI of the controller.
   const DefaultIJKControllerWidget({
@@ -77,11 +83,13 @@ class DefaultIJKControllerWidget extends StatefulWidget {
     this.onFullButton,
     this.fullScreenType = FullScreenType.rotateBox,
     this.statusWidgetBuilder = IjkStatusWidget.buildStatusWidget,
+    this.hideSystemBarOnFullScreen = true,
+    this.onFullScreen,
   }) : super(key: key);
 
   @override
-  _DefaultIJKControllerWidgetState createState() =>
-      _DefaultIJKControllerWidgetState();
+  DefaultIJKControllerWidgetState createState() =>
+      DefaultIJKControllerWidgetState();
 
   DefaultIJKControllerWidget copyWith({
     Key key,
@@ -118,7 +126,7 @@ class DefaultIJKControllerWidget extends StatefulWidget {
   }
 }
 
-class _DefaultIJKControllerWidgetState extends State<DefaultIJKControllerWidget>
+class DefaultIJKControllerWidgetState extends State<DefaultIJKControllerWidget>
     implements TooltipDelegate {
   IjkMediaController get controller => widget.controller;
 
@@ -235,15 +243,23 @@ class _DefaultIJKControllerWidgetState extends State<DefaultIJKControllerWidget>
     }
     var isFull = widget.currentFullScreenState;
 
-    IJKControllerWidgetBuilder fullscreenBuilder =
-        widget.fullscreenControllerWidgetBuilder ??
-            (ctx) => widget.copyWith(currentFullScreenState: true);
-
     return IconButton(
       color: Colors.white,
       icon: Icon(isFull ? Icons.fullscreen_exit : Icons.fullscreen),
       onPressed: () {
-        if (isFull) {
+        fullScreen();
+        
+      },
+    );
+  }
+
+  void fullScreen() {
+    var isFull = widget.currentFullScreenState;
+
+    IJKControllerWidgetBuilder fullscreenBuilder =
+        widget.fullscreenControllerWidgetBuilder ??
+            (ctx) => widget.copyWith(currentFullScreenState: true);
+    if (isFull) {
           if (widget.onFullButton != null) {
             widget.onFullButton(false);
           }
@@ -262,8 +278,7 @@ class _DefaultIJKControllerWidgetState extends State<DefaultIJKControllerWidget>
             statusWidgetBuilder: widget.statusWidgetBuilder,
           );
         }
-      },
-    );
+
   }
 
   int _overlayTurns = 0;

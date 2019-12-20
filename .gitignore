@@ -7,3 +7,7 @@
 build/
 .idea
 doc/
+pubspec.lock
+fvm
+
+node_modules
