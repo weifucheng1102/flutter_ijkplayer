@@ -51,6 +51,7 @@ class IjkStatusWidget extends StatelessWidget {
       return _buildFailWidget(context);
     }
     if (status == IjkStatus.pause) {
+return Container();
       //return _buildCenterIconButton(Icons.play_arrow, controller.play);
     }
     if (status == IjkStatus.complete) {
