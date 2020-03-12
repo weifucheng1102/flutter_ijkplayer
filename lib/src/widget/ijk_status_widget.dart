@@ -51,7 +51,7 @@ class IjkStatusWidget extends StatelessWidget {
       return _buildFailWidget(context);
     }
     if (status == IjkStatus.pause) {
-      return _buildNewCenterIconButton(Icons.play_arrow, controller.play);
+      return _buildCenterIconButton(Icons.play_arrow, controller.play);
     }
     if (status == IjkStatus.complete) {
       return _buildCenterIconButton(Icons.replay, () async {
@@ -66,7 +66,7 @@ class IjkStatusWidget extends StatelessWidget {
     BuildContext context,
     IjkMediaController controller,
   ) {
-    return _buildNewCenterIconButton(Icons.play_arrow, controller.play);
+    return _buildCenterIconButton(Icons.play_arrow, controller.play);
   }
 }
 
@@ -76,12 +76,6 @@ Widget _buildNothing(BuildContext context) {
       "",
       style: TextStyle(color: Colors.white),
     ),
-  );
-}
-
-Widget _buildNewCenterIconButton(IconData iconData, Function onTap) {
-  return Center(
-    
   );
 }
 
