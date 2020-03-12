@@ -51,7 +51,7 @@ class IjkStatusWidget extends StatelessWidget {
       return _buildFailWidget(context);
     }
     if (status == IjkStatus.pause) {
-      return _buildCenterIconButton(Icons.play_arrow, controller.play);
+      return _buildNewCenterIconButton(Icons.play_arrow, controller.play);
     }
     if (status == IjkStatus.complete) {
       return _buildCenterIconButton(Icons.replay, () async {
@@ -66,7 +66,7 @@ class IjkStatusWidget extends StatelessWidget {
     BuildContext context,
     IjkMediaController controller,
   ) {
-    return _buildCenterIconButton(Icons.play_arrow, controller.play);
+    return _buildNewCenterIconButton(Icons.play_arrow, controller.videoInfo);
   }
 }
 
@@ -76,6 +76,40 @@ Widget _buildNothing(BuildContext context) {
       "",
       style: TextStyle(color: Colors.white),
     ),
+  );
+}
+
+Widget _buildNewCenterIconButton(IconData iconData, Function onTap) {
+  return Center(
+    child: Container(
+                  child: RaisedButton.icon(
+                      icon: Icon(iconData),
+                      label: Text(
+                        '立即收看',
+                        textScaleFactor: 1,
+                      ),
+                      textColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8)),
+                      color: Colors.black.withOpacity(0.7),
+                      highlightColor: Colors.black.withOpacity(0.7),
+                      onPressed: onTap;
+                      }),
+                ),
+    // Container(
+    //   width: 50,
+    //   height: 50,
+    //   decoration: BoxDecoration(
+    //     color: Colors.white.withOpacity(0.75),
+    //     borderRadius: BorderRadius.circular(30),
+    //   ),
+    //   child: IconButton(
+    //     iconSize: 30,
+    //     color: Colors.black,
+    //     icon: Icon(iconData),
+    //     onPressed: onTap,
+    //   ),
+    // ),
   );
 }
 
