@@ -66,7 +66,7 @@ class IjkStatusWidget extends StatelessWidget {
     BuildContext context,
     IjkMediaController controller,
   ) {
-    return _buildNewCenterIconButton(Icons.play_arrow, controller.videoInfo);
+    return _buildNewCenterIconButton(Icons.play_arrow, controller.play);
   }
 }
 
@@ -94,22 +94,8 @@ Widget _buildNewCenterIconButton(IconData iconData, Function onTap) {
                       color: Colors.black.withOpacity(0.7),
                       highlightColor: Colors.black.withOpacity(0.7),
                       onPressed: onTap;
-                      }),
-                ),
-    // Container(
-    //   width: 50,
-    //   height: 50,
-    //   decoration: BoxDecoration(
-    //     color: Colors.white.withOpacity(0.75),
-    //     borderRadius: BorderRadius.circular(30),
-    //   ),
-    //   child: IconButton(
-    //     iconSize: 30,
-    //     color: Colors.black,
-    //     icon: Icon(iconData),
-    //     onPressed: onTap,
-    //   ),
-    // ),
+                      })
+                )
   );
 }
 
