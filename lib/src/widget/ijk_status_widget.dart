@@ -81,21 +81,7 @@ Widget _buildNothing(BuildContext context) {
 
 Widget _buildNewCenterIconButton(IconData iconData, Function onTap) {
   return Center(
-    child: Container(
-                  child: RaisedButton.icon(
-                      icon: Icon(iconData),
-                      label: Text(
-                        '立即收看',
-                        textScaleFactor: 1,
-                      ),
-                      textColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8)),
-                      color: Colors.black.withOpacity(0.7),
-                      highlightColor: Colors.black.withOpacity(0.7),
-                      onPressed: onTap;
-                      })
-                )
+    
   );
 }
 
